@@ -2,205 +2,217 @@
 
 [![Build Status](https://storage.googleapis.com/tf-quant-finance-build-result/status.svg?)](https://storage.googleapis.com/tf-quant-finance-build-result/logs.txt)
 
-## Table of contents
-1. [Introduction](#introduction)
-2. [Installation](#installation)
-3. [TensorFlow training](#tensorflow-training)
-4. [Development roadmap](#development-roadmap)
-5. [Examples](#examples)
-6. [Contributing](#contributing)
-7. [Development](#development)
-8. [Community](#community)
-9. [Disclaimers](#disclaimers)
-10. [License](#license)
-
-## Introduction
-
-This library provides high-performance components leveraging the hardware
-acceleration support and automatic differentiation of TensorFlow. The
-library will provide TensorFlow support for foundational mathematical methods,
-mid-level methods, and specific pricing models. The coverage is being
-expanded over the next few months.
-
-The library is structured along three tiers:
-
-1. **Foundational methods**.
-Core mathematical methods - optimisation, interpolation, root finders,
-linear algebra, random and quasi-random number generation, etc.
-
-2. **Mid-level methods**.
-ODE & PDE solvers, Ito process framework, Diffusion Path Generators,
-Copula samplers etc.
-
-3. **Pricing methods and other quant finance specific utilities**.
-Specific Pricing models (e.g., Local Vol (LV), Stochastic Vol (SV),
-Stochastic Local Vol (SLV), Hull-White (HW)) and their calibration.
-Rate curve building, payoff descriptions, and schedule generation.
-
-We aim for the library components to be easily accessible at each level. Each layer will be accompanied by many examples that can run independently of
-higher-level components.
-
-## Installation
-
-The easiest way to get started with the library is via the pip package.
-
-Note that the library requires Python 3.7 and Tensorflow >= 2.7.
-
-First, please install the most recent version of TensorFlow by following
-the [TensorFlow installation instructions](https://tensorflow.org/install).
-For example, you could install TensorFlow
-
-```sh
-pip3 install --upgrade tensorflow
-```
-
-Then run
-
-```sh
-pip3 install --upgrade tf-quant-finance
-```
-
-You maybe also have to use the option ```--user```.
-
-## TensorFlow training
-
-If you are not familiar with TensorFlow, an excellent place to get started is with the
-following self-study introduction to TensorFlow notebooks:
-
-   * [Introduction to TensorFlow Part 1 - Basics](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_1_-_Basics.ipynb).
-   * [Introduction to TensorFlow Part 2 - Debugging and Control Flow](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_2_-_Debugging_and_Control_Flow.ipynb).
-   * [Introduction to TensorFlow Part 3 - Advanced Tensor Manipulation](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_3_-_Advanced_Tensor_Manipulation.ipynb).
-
-## Development roadmap
-
-We are working on expanding the coverage of the library. Areas under active development are:
-
-  * Ito Processes: Framework for defining [Ito processes](https://en.wikipedia.org/wiki/It%C3%B4_calculus#It%C3%B4_processes).
-  Includes methods for sampling paths from a process and for solving the
-  associated backward Kolmogorov equation.
-  * Implementation of the following specific processes/models:
-      * Brownian Motion
-      * Geometric Brownian Motion
-      * Ornstein-Uhlenbeck
-      * One-Factor Hull-White model
-      * Heston model
-      * Local volatility model.
-      * Quadratic Local Vol model.
-      * SABR model
-  * Copulas: Support for defining and sampling from copulas.
-  * Model Calibration:
-      * Dupire local vol calibration.
-      * SABR model calibration.
-  * Rate curve fitting: Hagan-West algorithm for yield curve bootstrapping and the Monotone Convex interpolation scheme.
-  * Support for dates, day-count conventions, holidays, etc.
-
-
-## Examples
-
-See [`tf_quant_finance/examples/`](https://github.com/google/tf-quant-finance/tree/master/tf_quant_finance/examples)
-for end-to-end examples. It includes tutorial notebooks such as:
-
-  *   [American Option pricing under the Black-Scholes model](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/American_Option_Black_Scholes.ipynb)
-  *   [Monte Carlo via Euler Scheme](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Monte_Carlo_Euler_Scheme.ipynb)
-  *   [Black Scholes: Price and Implied Vol](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Black_Scholes_Price_and_Implied_Vol.ipynb)
-  *   [Forward and Backward mode gradients in TFF](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Forward_Backward_Diff.ipynb)
-  *   [Root search using Brent's method](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Root_Search.ipynb)
-  *   [Optimization](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Optimization.ipynb)
-  *   [Swap Curve Fitting](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Swap_Curve_Fitting.ipynb)
-  *   [Vectorization and XLA compilation](https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Vectorization_and_XLA_compilation.ipynb)
-
-The above links will open Jupyter Notebooks in Colab.
-
-## Contributing
-
-We're eager to collaborate with you! See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to contribute. This project adheres to TensorFlow's code of conduct. By participating, you are expected to uphold this code.
-
-## Development
-
-This section is for developers who want to contribute code to the
-library. If you are only interested in using the library, please follow the
-instructions in the [Installation](#installation) section.
-
-### Development dependencies
-
-This library has the following dependencies:
-
-1.  Bazel
-2.  Python 3 (Bazel uses Python 3 by default)
-3.  TensorFlow version >= 2.7
-4.  TensorFlow Probability version between v0.11.0 and v0.12.1
-5.  Numpy version 1.21 or higher
-6.  Attrs
-7.  Dataclasses (not needed if your Python version >= 3.7)
-
-This library requires the
-[Bazel](https://bazel.build/) build system. Please follow the
-[Bazel installation instructions](https://docs.bazel.build/versions/master/install.html)
-for your platform.
-
-
-You can install TensorFlow and related dependencies using the ```pip3 install```
-command:
-
-```sh
-pip3 install --upgrade tf-nightly tensorflow-probability==0.12.1 numpy==1.21 attrs dataclasses
-```
-
-### Commonly used commands
-
-Clone the GitHub repository:
-
-```sh
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><h1 tabindex="-1" dir="auto"><a id="user-content-tf-quant-finance-tensorflow-based-quant-finance-library" class="anchor" aria-hidden="true" tabindex="-1" href="#tf-quant-finance-tensorflow-based-quant-finance-library"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TF Quant Finance：基于 TensorFlow 的量化金融库</font></font></h1>
+<p dir="auto"><a href="https://storage.googleapis.com/tf-quant-finance-build-result/logs.txt" rel="nofollow"><img src="https://camo.githubusercontent.com/cc0af88df413691ba1d9ead024567ced10759f7d1d5fe9c10cd3c99f971bb628/68747470733a2f2f73746f726167652e676f6f676c65617069732e636f6d2f74662d7175616e742d66696e616e63652d6275696c642d726573756c742f7374617475732e7376673f" alt="构建状态" data-canonical-src="https://storage.googleapis.com/tf-quant-finance-build-result/status.svg?" style="max-width: 100%;"></a></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-table-of-contents" class="anchor" aria-hidden="true" tabindex="-1" href="#table-of-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">目录</font></font></h2>
+<ol dir="auto">
+<li><a href="#introduction"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">介绍</font></font></a></li>
+<li><a href="#installation"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font></a></li>
+<li><a href="#tensorflow-training"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 训练</font></font></a></li>
+<li><a href="#development-roadmap"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发展路线图</font></font></a></li>
+<li><a href="#examples"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">例子</font></font></a></li>
+<li><a href="#contributing"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">贡献</font></font></a></li>
+<li><a href="#development"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发展</font></font></a></li>
+<li><a href="#community"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">社区</font></font></a></li>
+<li><a href="#disclaimers"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">免责声明</font></font></a></li>
+<li><a href="#license"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">执照</font></font></a></li>
+</ol>
+<h2 tabindex="-1" dir="auto"><a id="user-content-introduction" class="anchor" aria-hidden="true" tabindex="-1" href="#introduction"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">介绍</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库提供利用 TensorFlow 的硬件加速支持和自动微分的高性能组件。</font><font style="vertical-align: inherit;">该库将为基础数学方法、中级方法和特定定价模型提供 TensorFlow 支持。</font><font style="vertical-align: inherit;">覆盖范围将在未来几个月内扩大。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库的结构分为三层：</font></font></p>
+<ol dir="auto">
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基础方法</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">核心数学方法——优化、插值、求根、线性代数、随机和准随机数生成等。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中级手段</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">ODE 和 PDE 求解器、Ito 过程框架、扩散路径生成器、Copula 采样器等。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">定价方法和其他量化金融特定公用事业</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">具体定价模型（例如，本地波动率（LV）、随机波动率（SV）、随机本地波动率（SLV）、赫尔-怀特（HW））及其校准。</font><font style="vertical-align: inherit;">利率曲线构建、收益描述和时间表生成。</font></font></p>
+</li>
+</ol>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们的目标是让每个级别都能轻松访问库组件。</font><font style="vertical-align: inherit;">每一层都附有许多可以独立于更高级别组件运行的示例。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-installation" class="anchor" aria-hidden="true" tabindex="-1" href="#installation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开始使用该库的最简单方法是通过 pip 包。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，该库需要 Python 3.7 和 Tensorflow &gt;= 2.7。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"></font><a href="https://tensorflow.org/install" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首先，请按照TensorFlow 安装说明</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装最新版本的 TensorFlow </font><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">例如，您可以安装 TensorFlow</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip3 install --upgrade tensorflow</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip3 install --upgrade tensorflow" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">然后运行</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip3 install --upgrade tf-quant-finance</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip3 install --upgrade tf-quant-finance" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您也许还必须使用该选项</font></font><code>--user</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-tensorflow-training" class="anchor" aria-hidden="true" tabindex="-1" href="#tensorflow-training"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 训练</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您不熟悉 TensorFlow，那么以下 TensorFlow 笔记本自学简介是一个很好的起点：</font></font></p>
+<ul dir="auto">
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_1_-_Basics.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 简介第 1 部分 - 基础知识</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_2_-_Debugging_and_Control_Flow.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 简介第 2 部分 - 调试和控制流</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Introduction_to_TensorFlow_Part_3_-_Advanced_Tensor_Manipulation.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 简介第 3 部分 - 高级张量操作</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+</ul>
+<h2 tabindex="-1" dir="auto"><a id="user-content-development-roadmap" class="anchor" aria-hidden="true" tabindex="-1" href="#development-roadmap"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发展路线图</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们正在努力扩大图书馆的覆盖范围。</font><font style="vertical-align: inherit;">正在积极开发的领域有：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ito 流程：定义</font></font><a href="https://en.wikipedia.org/wiki/It%C3%B4_calculus#It%C3%B4_processes" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ito 流程的</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">框架。</font><font style="vertical-align: inherit;">包括从过程中采样路径以及求解相关的后向柯尔莫哥洛夫方程的方法。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">实施以下具体流程/模型：
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">布朗运动</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">几何布朗运动</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">奥恩斯坦-乌伦贝克</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一因子 Hull-White 模型</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">赫斯顿模型</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">局部波动率模型。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">二次局部体积模型。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SABR模型</font></font></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Copulas：支持对 copula 的定义和采样。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">模型校准：
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dupire 本地体积校准。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SABR模型校准。</font></font></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">利率曲线拟合：用于收益率曲线引导的 Hagan-West 算法和单调凸插值方案。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持日期、日计数约定、假期等。</font></font></li>
+</ul>
+<h2 tabindex="-1" dir="auto"><a id="user-content-examples" class="anchor" aria-hidden="true" tabindex="-1" href="#examples"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">例子</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请参阅</font></font><a href="https://github.com/google/tf-quant-finance/tree/master/tf_quant_finance/examples"><code>tf_quant_finance/examples/</code></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+参考资料 端到端示例。</font><font style="vertical-align: inherit;">它包括教程笔记本，例如：</font></font></p>
+<ul dir="auto">
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/American_Option_Black_Scholes.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">布莱克-斯科尔斯模型下的美式期权定价</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Monte_Carlo_Euler_Scheme.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蒙特卡洛通过欧拉方案</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Black_Scholes_Price_and_Implied_Vol.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Black Scholes：价格和隐含交易量</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Forward_Backward_Diff.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TFF 中的前向和后向模式梯度</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Root_Search.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用布伦特法进行寻根</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Optimization.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">优化</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Swap_Curve_Fitting.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">交换曲线拟合</font></font></a></li>
+<li><a href="https://colab.research.google.com/github/google/tf-quant-finance/blob/master/tf_quant_finance/examples/jupyter_notebooks/Vectorization_and_XLA_compilation.ipynb" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">矢量化和 XLA 编译</font></font></a></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上述链接将在 Colab 中打开 Jupyter Notebooks。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-contributing" class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">贡献</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们渴望与您合作！</font><font style="vertical-align: inherit;">有关如何贡献的指南，</font><font style="vertical-align: inherit;">请参阅</font></font><a href="/google/tf-quant-finance/blob/master/CONTRIBUTING.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CONTRIBUTING.md 。</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该项目遵守 TensorFlow 的行为准则。</font><font style="vertical-align: inherit;">通过参与，您应该遵守此准则。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-development" class="anchor" aria-hidden="true" tabindex="-1" href="#development"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发展</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本部分适用于想要向库贡献代码的开发人员。</font><font style="vertical-align: inherit;">如果您只想使用该库，请按照</font></font><a href="#installation"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">部分中的说明进行操作。</font></font></p>
+<h3 tabindex="-1" dir="auto"><a id="user-content-development-dependencies" class="anchor" aria-hidden="true" tabindex="-1" href="#development-dependencies"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开发依赖</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库具有以下依赖项：</font></font></p>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">巴泽尔</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Python 3（Bazel 默认使用 Python 3）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 版本 &gt;= 2.7</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">v0.11.0 和 v0.12.1 之间的 TensorFlow Probability 版本</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Numpy 版本 1.21 或更高版本</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">属性</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据类（如果您的 Python 版本 &gt;= 3.7，则不需要）</font></font></li>
+</ol>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库需要
+</font></font><a href="https://bazel.build/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Bazel</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建系统。</font><font style="vertical-align: inherit;">请遵循适合
+</font><font style="vertical-align: inherit;">
+您平台的</font></font><a href="https://docs.bazel.build/versions/master/install.html" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Bazel 安装说明。</font></font></a><font style="vertical-align: inherit;"></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以使用以下命令安装 TensorFlow 和相关依赖项</font></font><code>pip3 install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip3 install --upgrade tf-nightly tensorflow-probability==0.12.1 numpy==1.21 attrs dataclasses</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip3 install --upgrade tf-nightly tensorflow-probability==0.12.1 numpy==1.21 attrs dataclasses" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h3 tabindex="-1" dir="auto"><a id="user-content-commonly-used-commands" class="anchor" aria-hidden="true" tabindex="-1" href="#commonly-used-commands"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">常用命令</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">克隆 GitHub 存储库：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>git clone https://github.com/google/tf-quant-finance.git</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="git clone https://github.com/google/tf-quant-finance.git" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">跑完之后</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> tf_quant_finance</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd tf_quant_finance" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以使用命令执行测试</font></font><code>bazel test</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">例如，</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>bazel <span class="pl-c1">test</span> tf_quant_finance/math/random_ops/sobol:sobol_test</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="bazel test tf_quant_finance/math/random_ops/sobol:sobol_test" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"></font><a href="https://github.com/google/tf-quant-finance/blob/master/tf_quant_finance/math/random_ops/sobol/sobol_test.py"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将在sobol_test.py</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中运行测试
+</font><font style="vertical-align: inherit;">
+。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测试使用 Python 版本 3 运行。请确保您可以</font></font><code>import tensorflow</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在 Python 3 shell 中运行。</font><font style="vertical-align: inherit;">否则，测试可能会失败。</font></font></p>
+<h3 tabindex="-1" dir="auto"><a id="user-content-building-a-custom-pip-package" class="anchor" aria-hidden="true" tabindex="-1" href="#building-a-custom-pip-package"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建自定义 pip 包</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下命令将从源代码构建自定义 pip 包并安装它：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c"><span class="pl-c">#</span> sudo apt-get install bazel git python python-pip rsync # For Ubuntu.</span>
 git clone https://github.com/google/tf-quant-finance.git
-```
-
-After you run
-
-```sh
-cd tf_quant_finance
-```
-
-you can execute tests using the ```bazel test``` command. For example,
-
-```sh
-bazel test tf_quant_finance/math/random_ops/sobol:sobol_test
-```
-
-will run tests in
-[sobol_test.py](https://github.com/google/tf-quant-finance/blob/master/tf_quant_finance/math/random_ops/sobol/sobol_test.py)
-.
-
-Tests run using Python version 3. Please make sure that you can
-run ```import tensorflow``` in the Python 3 shell. Otherwise, tests might fail.
-
-### Building a custom pip package
-
-The following commands will build custom pip package from source and install it:
-
-```sh
-# sudo apt-get install bazel git python python-pip rsync # For Ubuntu.
+<span class="pl-c1">cd</span> tf-quant-finance
+bazel build :build_pip_pkg
+./bazel-bin/build_pip_pkg artifacts
+pip install --user --upgrade artifacts/<span class="pl-k">*</span>.whl</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="# sudo apt-get install bazel git python python-pip rsync # For Ubuntu.
 git clone https://github.com/google/tf-quant-finance.git
 cd tf-quant-finance
 bazel build :build_pip_pkg
 ./bazel-bin/build_pip_pkg artifacts
-pip install --user --upgrade artifacts/*.whl
-```
-
-## Community
-
-1. [GitHub repository](https://github.com/google/tf-quant-finance): Report bugs or make feature requests.
-
-2. [TensorFlow Blog](https://blog.tensorflow.org/): Stay up to date on content from the TensorFlow team and best articles from the community.
-
-3. tf-quant-finance@googlegroups.com: Open mailing list for discussion and questions of this library.
-
-4. TensorFlow Probability: This library will leverage methods from [TensorFlow Probability](https://www.tensorflow.org/probability) (TFP).
-
-## Disclaimers
-
-Google does not officially support this product. This library is under active development, and interfaces may change at any time.
-
-## License
-
-This library is licensed under the Apache 2 license (see [LICENSE](LICENSE)). This library uses Sobol primitive polynomials and initial direction numbers
-which are licensed under the BSD license.
+pip install --user --upgrade artifacts/*.whl" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h2 tabindex="-1" dir="auto"><a id="user-content-community" class="anchor" aria-hidden="true" tabindex="-1" href="#community"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">社区</font></font></h2>
+<ol dir="auto">
+<li>
+<p dir="auto"><a href="https://github.com/google/tf-quant-finance"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">GitHub 存储库</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：报告错误或提出功能请求。</font></font></p>
+</li>
+<li>
+<p dir="auto"><a href="https://blog.tensorflow.org/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow 博客</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：随时了解 TensorFlow 团队的最新内容和社区的最佳文章。</font></font></p>
+</li>
+<li>
+<p dir="auto"><a href="mailto:tf-quant-finance@googlegroups.com"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">tf-quant-finance@googlegroups.com</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：打开邮件列表以讨论此库和提出问题。</font></font></p>
+</li>
+<li>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow Probability：该库将利用</font></font><a href="https://www.tensorflow.org/probability" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TensorFlow Probability</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> (TFP) 中的方法。</font></font></p>
+</li>
+</ol>
+<h2 tabindex="-1" dir="auto"><a id="user-content-disclaimers" class="anchor" aria-hidden="true" tabindex="-1" href="#disclaimers"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">免责声明</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Google 不正式支持该产品。</font><font style="vertical-align: inherit;">该库正在积极开发中，接口可能随时更改。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-license" class="anchor" aria-hidden="true" tabindex="-1" href="#license"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">执照</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库根据 Apache 2 许可证获得许可（请参阅</font></font><a href="/google/tf-quant-finance/blob/master/LICENSE"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">许可证</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）。</font><font style="vertical-align: inherit;">该库使用 Sobol 本原多项式和初始方向数，这些都在 BSD 许可证下获得许可。</font></font></p>
+</article></div>
